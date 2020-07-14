@@ -16,24 +16,27 @@ public class Artikel {
         return preis;
     }
 
-    public void setPreis(Double preis) {
+    public void setPreis(Double preis) throws SQLException {
         this.preis = preis;
+        artikelDAO.update(this);
     }
 
     public int getBestand() {
         return bestand;
     }
 
-    public void setBestand(int bestand) {
+    public void setBestand(int bestand) throws SQLException {
         this.bestand = bestand;
+        artikelDAO.update(this);
     }
 
     public int getMindestbestand() {
         return mindestbestand;
     }
 
-    public void setMindestbestand(int mindestbestand) {
+    public void setMindestbestand(int mindestbestand) throws SQLException {
         this.mindestbestand = mindestbestand;
+        artikelDAO.update(this);
     }
     
     public Artikel(long anr, String bschr, int bstd, int minbstd, double prs) {
@@ -46,11 +49,6 @@ public class Artikel {
 
     public long getArtikelnummer() {
         return artikelnummer;
-    }
-
-    public void setKundennummer(long kundennummer) throws SQLException {
-        this.artikelnummer = kundennummer;
-        artikelDAO.update(this);
     }
 
     public String getBeschreibung() {

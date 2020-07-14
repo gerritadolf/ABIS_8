@@ -1,46 +1,56 @@
 package artikelDAO;
 
+import org.postgresql.core.SqlCommand;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class AbstractDAO<T> {
-    private HashMap<Long, T> cache;
+    protected HashMap<Long, T> cache = new HashMap<>();
 
     protected Connection getConnection() throws SQLException {
         return DriverManager.getConnection("jdbc:postgresql://localhost:5432/xdb?user=abis&password=abis");
     }
 
-    protected T read(Long id) throws SQLException {
+    protected T read(Long id) {
         T result = cache.get(id);
         if(result != null) {
             return result;
         }
-        PreparedStatement findStatement = null;
-        Connection db = getConnection();
-        findStatement = db.prepareStatement(findStatement());
-        findStatement.setLong(1, id);
-        ResultSet rs = findStatement.executeQuery();
+        try{
+            PreparedStatement findStatement = null;
+            Connection db = getConnection();
+            findStatement = db.prepareStatement(findStatement());
+            findStatement.setLong(1, id);
+            ResultSet rs = findStatement.executeQuery();
 
-        if(!rs.next()) {
+            if(!rs.next()) {
+                return null;
+            }
+            result = doLoad(rs);
+            return result;
+        } catch (SQLException ex){
             return null;
         }
-        result = doLoad(rs);
-        return result;
     }
 
     protected ArrayList<T>  read(String condition) throws SQLException {
-        ArrayList<T> resultList = new ArrayList<>();
-        PreparedStatement findStatement = null;
-        Connection db = getConnection();
-        findStatement = db.prepareStatement(findStatementBase() + condition);
-        ResultSet rs = findStatement.executeQuery();
+        try {
+            ArrayList<T> resultList = new ArrayList<>();
+            PreparedStatement findStatement = null;
+            Connection db = getConnection();
+            findStatement = db.prepareStatement(findStatementBase() + condition);
+            ResultSet rs = findStatement.executeQuery();
 
-        while(rs.next()) {
-            T result = doLoad(rs);
-            resultList.add(result);
+            while(rs.next()) {
+                T result = doLoad(rs);
+                resultList.add(result);
+            }
+            return resultList;
+        } catch (SQLException ex) {
+            return null;
         }
-        return resultList;
     }
 
     protected long create (T o) throws SQLException {
@@ -61,7 +71,7 @@ public abstract class AbstractDAO<T> {
         Connection db = getConnection();
         deleteStatement = db.prepareStatement(deleteStatement());
         deleteStatement.setLong(1, id);
-        deleteStatement.executeQuery();
+        deleteStatement.execute();
         cache.remove(id);
     }
 
