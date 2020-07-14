@@ -13,6 +13,11 @@ public class ArtikelDAO extends AbstractDAO<Artikel> {
     }
 
     @Override
+    protected Long getKey(Artikel o) {
+        return o.getArtikelnummer();
+    }
+
+    @Override
     protected String findStatementBase() {
         return "SELECT * FROM Artikel WHERE ";
     }
@@ -58,11 +63,6 @@ public class ArtikelDAO extends AbstractDAO<Artikel> {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return o.getArtikelnummer();
-    }
-
-    @Override
-    protected Long getKey(Artikel o) {
         return o.getArtikelnummer();
     }
 

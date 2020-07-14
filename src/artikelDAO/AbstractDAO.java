@@ -6,13 +6,6 @@ import java.util.HashMap;
 
 public abstract class AbstractDAO<T> {
     private HashMap<Long, T> cache;
-    protected long create (T o) throws SQLException {
-        long id = getKey(o);
-        if(cache.containsKey(id)) throw new SQLException("Objekt bereits vorhanden: " + id);
-        id = doInsert(o);
-        cache.put(id, o);
-        return id;
-    }
 
     protected Connection getConnection() throws SQLException {
         return DriverManager.getConnection("jdbc:postgresql://localhost:5432/xdb?user=abis&password=abis");
@@ -50,11 +43,19 @@ public abstract class AbstractDAO<T> {
         return resultList;
     }
 
+    protected long create (T o) throws SQLException {
+        long id = getKey(o);
+        if(cache.containsKey(id)) throw new SQLException("Objekt bereits vorhanden: " + id);
+        id = doInsert(o);
+        cache.put(id, o);
+        return id;
+    }
 
     protected void update(T o) throws SQLException {
         long id = doUpdate(o);
         cache.put(id, o);
     }
+
     protected void delete (Long id) throws SQLException {
         PreparedStatement deleteStatement = null;
         Connection db = getConnection();
@@ -64,14 +65,11 @@ public abstract class AbstractDAO<T> {
         cache.remove(id);
     }
 
-    protected abstract String findStatement();
+    protected abstract Long getKey(T o);
     protected abstract String findStatementBase();
+    protected abstract String findStatement();
     protected abstract String deleteStatement();
     protected abstract Long doInsert(T o) throws SQLException;
     protected abstract Long doUpdate(T o) throws SQLException;
-    protected abstract Long getKey(T o);
     protected abstract T doLoad(ResultSet rs) throws SQLException;
-
-
-
 }
