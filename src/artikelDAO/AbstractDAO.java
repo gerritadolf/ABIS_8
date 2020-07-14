@@ -35,7 +35,7 @@ public abstract class AbstractDAO<T> {
         }
     }
 
-    protected ArrayList<T>  read(String condition) throws SQLException {
+    protected ArrayList<T> read(String condition) throws SQLException {
         try {
             ArrayList<T> resultList = new ArrayList<>();
             PreparedStatement findStatement = null;

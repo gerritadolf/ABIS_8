@@ -70,11 +70,11 @@ public class Artikel {
 	/** Holen eines vorhandenen Artikels aus der Datenhaltungsschicht
 	*   Über die Artikelnummer
 	**/
-	public static Artikel read(long artikelnummer) throws SQLException {
+	public static Artikel find(long artikelnummer) throws SQLException {
 
 	    return ArtikelDAO.getInstance().read(artikelnummer);
 	}
-    public static ArrayList<Artikel> read(String condition) throws SQLException {
+    public static ArrayList<Artikel> find(String condition) throws SQLException {
         return ArtikelDAO.getInstance().read(condition);
     }
 
