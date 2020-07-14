@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class AbstractDAO<T> {
-    protected HashMap<Long, T> cache;
+    private HashMap<Long, T> cache;
     protected long create (T o) throws SQLException {
         long id = getKey(o);
         if(cache.containsKey(id)) throw new SQLException("Objekt bereits vorhanden: " + id);

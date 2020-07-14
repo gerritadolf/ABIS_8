@@ -8,7 +8,7 @@ public class ArtikelDAO extends AbstractDAO<Artikel> {
 
     private static ArtikelDAO artikelDAO = new ArtikelDAO();
 
-    protected static ArtikelDAO getInstance() {
+    static ArtikelDAO getInstance() {
         return artikelDAO;
     }
 
@@ -21,7 +21,6 @@ public class ArtikelDAO extends AbstractDAO<Artikel> {
     protected String findStatement() {
         return findStatementBase() + "Artikelnr = ?";
     }
-
 
     @Override
     protected String deleteStatement() {
